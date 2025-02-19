@@ -23,8 +23,15 @@ pred restore [f : File] {
   File' = File       // frame condition on File
 }
 
-fact trans {
-  always (empty or (some f : File | delete[f] or restore[f]))
+pred permdelete [f : File]{
+  f in Trash
+  Trash' = Trash - f
+  File' = File - f
 }
 
-run example {}
+
+fact trans {
+  always (empty or (some f : File | delete[f] or restore[f] or permdelete[f]))
+}
+
+run example {} for 5
